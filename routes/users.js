@@ -67,43 +67,5 @@ router.delete("/:id", verify, async (req, res) => {
     res.status(403).json("You can delete only your account");
   }
 });
-//GET USER STATS
-router.get("/stats", async (req, res) => {
-  const today = new Date();
-
-  const lastYear = today.setFullYear(today.setFullYear() - 1);
-
-  const monthsArray = [
-    "Juanary",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "November",
-    "December",
-  ];
-  try {
-    const data = await User.aggregate([
-      {
-        $project: {
-          month: { $year: "$createdAt" },
-        },
-      },
-      {
-        $group: {
-          _id: "$month",
-          total: { $sum: 1 },
-        },
-      },
-    ]);
-    res.status(200).json(data);
-  } catch (error) {
-    res.status(500).json(error);
-  }
-});
 
 module.exports = router;
